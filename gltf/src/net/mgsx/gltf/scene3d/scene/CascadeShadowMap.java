@@ -33,7 +33,13 @@ public class CascadeShadowMap implements Disposable {
 	private final BoundingBox box = new BoundingBox();
 	private final Vector3 center = new Vector3();
 	private final Vector3 offset = new Vector3();
-	
+
+	public int refreshFactor = 2;
+	/* How often each cascade's depth map gets updated (multiplier per cascade).
+	 * With a value of 2 the closest cascade gets updated every frame, the next cascade every 2nd frame, the next every 4th frame, etc.
+	 * This can improve the frame rate by doing fewer depth passes on average at the cost of delaying shadow updates in the distance.
+	 */
+
 	/**
 	 * @param cascadeCount how many extra cascades
 	 */

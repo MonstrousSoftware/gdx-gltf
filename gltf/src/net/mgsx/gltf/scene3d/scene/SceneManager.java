@@ -283,6 +283,8 @@ public class SceneManager implements Disposable {
 		}
 	}
 
+	private int frameCounter;
+
 	/**
 	 * Render shadows only to interal frame buffers.
 	 * (useful when you're using your own frame buffer to render scenes)
@@ -302,10 +304,15 @@ public class SceneManager implements Disposable {
 		computedEnvironement.shadowMap = environment.shadowMap;
 		
 		if(cascadeShadowMap != null){
+			frameCounter++;
+			int factor = 1;
 			for(DirectionalShadowLight light : cascadeShadowMap.lights){
-				light.begin();
-				renderDepth(light.getCamera());
-				light.end();
+				if(frameCounter % factor == 0) {
+					light.begin();
+					renderDepth(light.getCamera());
+					light.end();
+				}
+				factor *= cascadeShadowMap.refreshFactor;
 			}
 			computedEnvironement.set(cascadeShadowMap.attribute);
 		}
